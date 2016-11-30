@@ -1,0 +1,110 @@
+#!/bin/sh
+
+set -ex
+
+export PATH="/opt/coverity_tool/bin:$PATH"
+
+mkdir /build
+cd /build
+
+fail() {
+    cat config.log
+    tail -100 cov-int/build-log.txt
+    exit $1
+}
+
+# Not yet enabled
+#               --enable-decklink \
+#               --enable-libcelt \
+#               --enable-libilbc \
+#               --enable-libkvazaar \
+#               --enable-libmfx \
+#               --enable-libnut \
+#               --enable-libopenmpt \
+#               --enable-libvidstab \
+#               --enable-libxavs \
+#               --enable-libzimg \
+#               --enable-mmal \
+#               --enable-jni \
+#               --enable-mediacodec \
+
+--enable-libzimg --enable-libiec61883 --enable-libopenh264 --enable-libfdk-aac
+
+/src/configure --enable-gpl --enable-version3 --enable-nonfree \
+               --enable-avisynth \
+               --enable-chromaprint \
+               --enable-frei0r \
+               --enable-gcrypt \
+               --enable-gmp \
+               --enable-gnutls \
+               --enable-ladspa \
+               --enable-libass \
+               --enable-libbluray \
+               --enable-libbs2b \
+               --enable-libcaca \
+               --enable-libcdio \
+               --enable-libdc1394 \
+               --enable-libfdk-aac \
+               --enable-libflite \
+               --enable-libfontconfig \
+               --enable-libfreetype \
+               --enable-libfribidi \
+               --enable-libgme \
+               --enable-libgsm \
+               --enable-libiec61883 \
+               --enable-libmodplug \
+               --enable-libmp3lame \
+               --enable-libopencore-amrnb \
+               --enable-libopencore-amrwb \
+               --enable-libopencv \
+               --enable-libopenh264 \
+               --enable-libopenjpeg \
+               --enable-libopus \
+               --enable-libpulse \
+               --enable-librubberband \
+               --enable-librtmp \
+               --enable-libschroedinger \
+               --enable-libshine \
+               --enable-libsmbclient \
+               --enable-libsnappy \
+               --enable-libsoxr \
+               --enable-libspeex \
+               --enable-libssh \
+               --enable-libtesseract \
+               --enable-libtheora \
+               --enable-libtwolame \
+               --enable-libv4l2 \
+               --enable-libvo-amrwbenc \
+               --enable-libvorbis \
+               --enable-libvpx \
+               --enable-libwavpack \
+               --enable-libwebp \
+               --enable-libx264 \
+               --enable-libx265 \
+               --enable-libxcb \
+               --enable-libxcb-shm \
+               --enable-libxcb-xfixes \
+               --enable-libxcb-shape \
+               --enable-libxvid \
+               --enable-libzimg \
+               --enable-libzmq  \
+               --enable-libzvbi \
+               --enable-netcdf \
+               --enable-openal \
+               --enable-opencl \
+               --enable-opengl \
+               --enable-openssl \
+               --enable-x11grab \
+               --enable-libnpp \
+               --enable-omx || fail $?
+           
+cov-build --dir cov-int make -j4 || fail $?
+
+tar -cavf ffmpeg.tar.xz cov-int
+
+curl --form token=$COVERITY_TOKEN \
+  --form email=$COVERITY_EMAIL \
+  --form file=@ffmpeg.tar.xz \
+  --form version="$(GIT_DIR=/src/.git git describe --tags --match N)" \
+  --form description="Automated build" \
+  https://scan.coverity.com/builds?project=FFmpeg%2FFFmpeg
