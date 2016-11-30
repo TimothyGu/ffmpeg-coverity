@@ -99,9 +99,12 @@ cov-build --dir cov-int make -j4 || fail $?
 
 tar -cavf ffmpeg.tar.xz cov-int
 
-curl --form token=$COVERITY_TOKEN \
-  --form email=$COVERITY_EMAIL \
-  --form file=@ffmpeg.tar.xz \
-  --form version="$(GIT_DIR=/src/.git git describe --tags --match N)" \
-  --form description="Automated build" \
-  https://scan.coverity.com/builds?project=FFmpeg%2FFFmpeg
+exit 0
+
+curl --form project=$COVERITY_SCAN_PROJECT_NAME \
+     --form token=$COVERITY_SCAN_TOKEN \
+     --form email=$COVERITY_SCAN_NOTIFICATION_EMAIL \
+     --form file=@ffmpeg.tar.xz \
+     --form version="$(GIT_DIR=/src/.git git describe --tags --match N)" \
+     --form description="Automated build" \
+     https://scan.coverity.com/builds

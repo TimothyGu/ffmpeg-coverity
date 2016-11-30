@@ -1,0 +1,19 @@
+language: c
+dist: trusty
+sudo: required
+env:
+  global:
+    - COVERITY_SCAN_PROJECT_NAME=FFmpeg/FFmpeg
+    - COVERITY_SCAN_NOTIFICATION_EMAIL=timothygu99@gmail.com
+    - secure: "ZLUTNr3G45vxzughp6eIPtMrs/XVL3HVIUs2U+QwKm3WYwj2vJhTbOuf8GZDD2McH8A+eeXLSwXKIumNf6tDs3VAnaa79whbSQkGABRUUOwNdURGAqtWglM1UwU7HOxDw3rza/dyN7aeESQbxhgYsxMo/yeHrtPebG0wHRzZ2w4ytDNBIl1rsivWpNyJ2Qn+sRiLlqllYyW9iQ9qQfogmEBnaasZ57ixJ2oxw3k++DQiSjLUjJzhCJfY6PfvCNbFOZTQ7Ey3Uxivi2PB1ELF4v7Q8g+3VLvM0G00EFT2AkfH2dR0X7/zAZPIemPU9C8/bygVCFAhs2gZqjQj9Ho73f+7doEnk/MpgH/+9yfXNlgHZFxEpV0i3OxOsuTPX2cbNNA1ReUS9QCSAkRHiWzShyXhqW2dWkcSV3Xhu97ZA3mX4MdDCrPx4bglikvUciZulh728xxGTeRDDnUXE27gZNI2jsY0Z1D8XzxTW23pa5APpU1+mgHEsz5BJzo0s0UZcwsAidWcf+FujNFpK2RdEDzDU2vLpwf93a9Ns8mvxpX63/jsW1lTazCnWzv8vpwI/bhicAdJRiEcTo9eWsVd25s5jcNKpOXAbDISxsEbeeiZVzoSKNN2LAtZzzurruvio8S5dM2IfS/iGGMKIpafJsYV7uto1Vg/fXxlJhF9o50="
+services:
+  - docker
+install:
+  - git clone https://github.com/FFmpeg/FFmpeg.git ffmpeg
+  - ./build-image
+script:
+  - docker run -v `pwd`/ffmpeg:/src
+    --env COVERITY_SCAN_PROJECT_NAME=$COVERITY_SCAN_PROJECT_NAME
+    --env COVERITY_SCAN_NOTIFICATION_EMAIL=$COVERITY_SCAN_NOTIFICATION_EMAIL
+    --env COVERITY_SCAN_TOKEN=$COVERITY_SCAN_TOKEN
+    ffmpeg/coverity

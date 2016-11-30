@@ -1,0 +1,8 @@
+#!/bin/sh
+
+wget -O coverity_tool.tgz \
+    https://scan.coverity.com/download/cxx/linux64 \
+    --post-data "project=$COVERITY_SCAN_PROJECT_NAME&token=$COVERITY_SCAN_TOKEN"
+
+docker pull ffmpeg/build
+docker build -t ffmpeg/coverity .
