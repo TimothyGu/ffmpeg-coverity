@@ -2,7 +2,9 @@
 
 set -ex
 
-export PATH="/opt/coverity_tool/bin:$PATH"
+TOOL_DIR=`find /opt -type d -name 'cov-analysis*'`
+echo $TOOL_DIR
+export PATH=$TOOL_DIR/bin:$PATH
 
 mkdir /build
 cd /build
