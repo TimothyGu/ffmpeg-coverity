@@ -1,12 +1,18 @@
 language: c
 dist: trusty
 sudo: required
+env:
+  global:
+    - secure: "ZLUTNr3G45vxzughp6eIPtMrs/XVL3HVIUs2U+QwKm3WYwj2vJhTbOuf8GZDD2McH8A+eeXLSwXKIumNf6tDs3VAnaa79whbSQkGABRUUOwNdURGAqtWglM1UwU7HOxDw3rza/dyN7aeESQbxhgYsxMo/yeHrtPebG0wHRzZ2w4ytDNBIl1rsivWpNyJ2Qn+sRiLlqllYyW9iQ9qQfogmEBnaasZ57ixJ2oxw3k++DQiSjLUjJzhCJfY6PfvCNbFOZTQ7Ey3Uxivi2PB1ELF4v7Q8g+3VLvM0G00EFT2AkfH2dR0X7/zAZPIemPU9C8/bygVCFAhs2gZqjQj9Ho73f+7doEnk/MpgH/+9yfXNlgHZFxEpV0i3OxOsuTPX2cbNNA1ReUS9QCSAkRHiWzShyXhqW2dWkcSV3Xhu97ZA3mX4MdDCrPx4bglikvUciZulh728xxGTeRDDnUXE27gZNI2jsY0Z1D8XzxTW23pa5APpU1+mgHEsz5BJzo0s0UZcwsAidWcf+FujNFpK2RdEDzDU2vLpwf93a9Ns8mvxpX63/jsW1lTazCnWzv8vpwI/bhicAdJRiEcTo9eWsVd25s5jcNKpOXAbDISxsEbeeiZVzoSKNN2LAtZzzurruvio8S5dM2IfS/iGGMKIpafJsYV7uto1Vg/fXxlJhF9o50="
 addons:
   coverity_scan:
     project:
-      name: "TimothyGu/ffmpeg-coverity"
+      name: "FFmpeg/FFmpeg"
       description: "Testing Travis CI's Coverity support"
     notification_email: timothygu99@gmail.com
     build_command_prepend: "which cov-build && echo $PATH"
     build_command: "true"
     branch_pattern: coverity_scan
+script:
+  - which cov-build
+  - echo $PATH
