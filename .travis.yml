@@ -1,0 +1,12 @@
+language: c
+dist: trusty
+sudo: required
+addons:
+  coverity_scan:
+    project:
+      name: "TimothyGu/ffmpeg-coverity"
+      description: "Testing Travis CI's Coverity support"
+    notification_email: timothygu99@gmail.com
+    build_command_prepend: "which cov-build && echo $PATH"
+    build_command: "true"
+    branch_pattern: coverity_scan
